@@ -1,0 +1,1 @@
+Download needed Bootstrap-Icons from: https://github.com/twbs/icons/releases/tag/v1.3.0

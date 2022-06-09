@@ -1,0 +1,18 @@
+[package]
+name = "web"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+domain = { path = "../../domain" }
+persistence = { path = "../persistence" }
+
+axum = "0.5"
+tower-http = { version = "0.2", features = ["fs", "add-extension"], default-features = false }
+tera = { version = "1.15" }
+serde = "1.0"
+once_cell = "1.12"
+regex = "1.5"
+
+# shared dependencies
+tokio = { version = "1.6" }
