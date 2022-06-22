@@ -10,7 +10,7 @@
 - visualize refreshing process
 - run refresh in background
 - useful logging/metrics
-- allow streaming of m3u8 (references to other files)
+- hide path in stream but still allow streaming of m3u8 files
 - change "files" to show current directory
   - one view that is always up to date + no need to refresh
   - show files + directories

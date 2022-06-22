@@ -75,7 +75,13 @@ impl Path {
 
 impl From<&DirEntry> for Path {
     fn from(e: &DirEntry) -> Self {
-        Path(e.path().to_string_lossy().to_string())
+        Path(
+            e.path()
+                .to_string_lossy()
+                .to_string()
+                .replace("\\", "/")
+                .replace("./", ""),
+        )
     }
 }
 

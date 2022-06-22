@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use domain::{
     error::{database, Result},
     persistence::repos::{
-        file::{DeleteByPath, File, FileInsert, FindAllWhereMimeLikeAny},
+        file::{DeleteByPath, File, FileInsert, FindAllWhereMimeLikeAny, FindByPath},
         general::{DeleteAll, FindAll, FindById, InsertAll},
     },
     types::Id,
@@ -102,6 +102,18 @@ impl DeleteAll<File> for Transaction {
 impl FindById<File> for Transaction {
     async fn find_by_id(&self, id: Id) -> Result<Option<File>> {
         entity::Entity::find_by_id(id.try_into().unwrap())
+            .one(&self.0)
+            .await
+            .map(|e| e.map(Into::into))
+            .map_err(|e| database(e.to_string()))
+    }
+}
+
+#[async_trait]
+impl FindByPath for Transaction {
+    async fn find_by_path(&self, path: &str) -> Result<Option<File>> {
+        entity::Entity::find()
+            .filter(entity::Column::Path.contains(path))
             .one(&self.0)
             .await
             .map(|e| e.map(Into::into))

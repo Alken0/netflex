@@ -11,7 +11,7 @@ pub fn setup(router: Router) -> Router {
     router
         .nest("/settings", settings::setup())
         .nest("/static", statics::setup())
-        .nest("/stream", stream::setup())
+        .nest("/api/stream", stream::setup())
         .nest("/files", files::setup())
         .nest("/videos", videos::setup())
         .nest("/audios", audios::setup())

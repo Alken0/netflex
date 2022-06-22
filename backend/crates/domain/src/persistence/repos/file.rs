@@ -20,6 +20,11 @@ pub struct File {
 }
 
 #[async_trait]
+pub trait FindByPath {
+    async fn find_by_path(&self, path: &str) -> Result<Option<File>>;
+}
+
+#[async_trait]
 pub trait DeleteByPath {
     async fn delete_by_path(&self, path: &str) -> Result<()>;
 }
