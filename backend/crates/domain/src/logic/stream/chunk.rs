@@ -26,7 +26,7 @@ impl Chunk {
 
         Ok(Self {
             start: range.start(),
-            end: range.end().checked_sub(1).unwrap_or(0),
+            end: range.end().saturating_sub(1),
             file_size: file.size,
             mime: file.mime,
             content,

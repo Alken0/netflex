@@ -90,7 +90,7 @@ impl From<&DirEntry> for Path {
             e.path()
                 .to_string_lossy()
                 .to_string()
-                .replace("\\", "/")
+                .replace('\\', "/")
                 .replace("./", ""),
         )
     }

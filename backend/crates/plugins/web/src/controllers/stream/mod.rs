@@ -16,7 +16,7 @@ async fn stream(
     range: HeaderRange,
 ) -> impl IntoResponse {
     let path = &path[1..]; //remove leading slash
-    let chunk = action.execute(&path, range.into()).await.unwrap();
+    let chunk = action.execute(path, range.into()).await.unwrap();
     let chunk = ChunkResponse::new(chunk);
     return chunk;
 }
