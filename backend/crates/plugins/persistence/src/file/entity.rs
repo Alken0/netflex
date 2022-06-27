@@ -6,9 +6,13 @@ use serde::{Deserialize, Serialize};
 pub struct Model {
     #[sea_orm(primary_key)]
     #[serde(skip_deserializing)]
+    /// PrimaryKey: only for database
     pub id: i32,
+    pub hash_high: u32,
+    pub hash_low: u32,
     pub name: String,
-    pub size: u32,
+    pub size_high: u32,
+    pub size_low: u32,
     pub path: String,
     pub mime: String,
 }

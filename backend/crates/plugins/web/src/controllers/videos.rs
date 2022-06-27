@@ -2,18 +2,15 @@ use axum::routing::get;
 use axum::Extension;
 use axum::Router;
 use axum::{extract::Path, response::Html};
-use domain::persistence::repos::file::File;
-use domain::{
-    logic::file::{find_all_videos::FindAllVideosAction, find_by_id::FindByIdAction},
-    types::Id,
-};
+use domain::logic::file::find_all_videos::FindAllVideosAction;
+use domain::{logic::file::find_by_hash::FindByHashAction, persistence::repos::file::File};
 use persistence::Database;
 use serde::Serialize;
 use tera::Context;
 
 pub fn setup() -> Router {
     Router::new()
-        .route("/:id", get(player))
+        .route("/:hash", get(player))
         .route("/", get(list))
 }
 
@@ -34,10 +31,10 @@ struct PlayerTemplateContext {
 }
 
 async fn player(
-    Extension(action): Extension<FindByIdAction<Database>>,
-    Path(id): Path<Id>,
+    Extension(action): Extension<FindByHashAction<Database>>,
+    Path(hash): Path<u64>,
 ) -> Html<String> {
-    let video = action.execute(id).await.unwrap().unwrap();
+    let video = action.execute(hash).await.unwrap().unwrap();
     let context = Context::from_serialize(PlayerTemplateContext { video }).unwrap();
     return crate::templates::parse("views/videos/player.html", &context);
 }

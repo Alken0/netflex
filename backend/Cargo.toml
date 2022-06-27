@@ -1,2 +1,2 @@
 [workspace]
-members = ["crates/domain", "crates/plugins/*"]
+members = ["crates/domain", "crates/plugins/*", "crates/libs/*"]

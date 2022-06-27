@@ -5,7 +5,6 @@
 ## Features
 - don't store configs at various places in code
 - error handling in axum
-- id that doesn't change on refresh
 - show a maximum of entries in lists, otherwise chrome has problems
 - visualize refreshing process
 - run refresh in background

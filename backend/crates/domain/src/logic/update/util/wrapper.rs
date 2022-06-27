@@ -1,5 +1,9 @@
 use crate::{error::Result, persistence::repos::file::FileInsert};
-use std::fs::Metadata;
+use std::{
+    collections::hash_map::DefaultHasher,
+    fs::Metadata,
+    hash::{Hash, Hasher},
+};
 use tokio::fs::DirEntry;
 
 pub struct DirEntryWrapper {
@@ -26,12 +30,19 @@ impl DirEntryWrapper {
 impl From<DirEntryWrapper> for FileInsert {
     fn from(e: DirEntryWrapper) -> Self {
         Self {
+            hash: hash(&e.path.0),
             name: e.path.file_name().into(),
             mime: e.path.mime().into(),
             size: e.metadata.len(),
             path: e.path.into(),
         }
     }
+}
+
+fn hash<T: Hash>(t: &T) -> u64 {
+    let mut s = DefaultHasher::new();
+    t.hash(&mut s);
+    s.finish()
 }
 
 struct Name(String);

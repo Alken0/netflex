@@ -8,6 +8,7 @@ pub struct FileInsert {
     pub size: u64,
     pub path: String,
     pub mime: String,
+    pub hash: u64,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -17,6 +18,7 @@ pub struct File {
     pub size: u64,
     pub path: String,
     pub mime: String,
+    pub hash: u64,
 }
 
 #[async_trait]
@@ -32,4 +34,9 @@ pub trait DeleteByPath {
 #[async_trait]
 pub trait FindAllWhereMimeLikeAny {
     async fn find_all_where_mime_like_any(&self, mimes: &[&str]) -> Result<Vec<File>>;
+}
+
+#[async_trait]
+pub trait FindByHash {
+    async fn find_by_hash(&self, hash: u64) -> Result<Option<File>>;
 }

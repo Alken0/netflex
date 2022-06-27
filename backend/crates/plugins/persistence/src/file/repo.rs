@@ -4,14 +4,13 @@ use async_trait::async_trait;
 use domain::{
     error::{database, Result},
     persistence::repos::{
-        file::{DeleteByPath, File, FileInsert, FindAllWhereMimeLikeAny, FindByPath},
+        file::{DeleteByPath, File, FileInsert, FindAllWhereMimeLikeAny, FindByHash, FindByPath},
         general::{DeleteAll, FindAll, FindById, InsertAll},
     },
     types::Id,
 };
-use sea_orm::{
-    sea_query::SimpleExpr, ColumnTrait, Condition, EntityTrait, Order, QueryFilter, QueryOrder,
-};
+use numbers::ConverterU64U32;
+use sea_orm::{sea_query::SimpleExpr, ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder};
 
 #[async_trait]
 impl DeleteByPath for Transaction {
@@ -86,11 +85,6 @@ fn mime_like_any(mimes: &[&str]) -> SimpleExpr {
 impl DeleteAll<File> for Transaction {
     async fn delete_all(&self) -> Result<()> {
         entity::Entity::delete_many()
-            .filter(
-                Condition::any()
-                    .add(entity::Column::Id.like("1"))
-                    .add(entity::Column::Id.not_like("1")),
-            )
             .exec(&self.0)
             .await
             .map(|_| ())
@@ -114,6 +108,20 @@ impl FindByPath for Transaction {
     async fn find_by_path(&self, path: &str) -> Result<Option<File>> {
         entity::Entity::find()
             .filter(entity::Column::Path.contains(path))
+            .one(&self.0)
+            .await
+            .map(|e| e.map(Into::into))
+            .map_err(|e| database(e.to_string()))
+    }
+}
+
+#[async_trait]
+impl FindByHash for Transaction {
+    async fn find_by_hash(&self, hash: u64) -> Result<Option<File>> {
+        let hash = ConverterU64U32::new_by_u64(hash);
+        entity::Entity::find()
+            .filter(entity::Column::HashHigh.eq(hash.high()))
+            .filter(entity::Column::HashLow.eq(hash.low()))
             .one(&self.0)
             .await
             .map(|e| e.map(Into::into))
