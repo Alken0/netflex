@@ -7,7 +7,6 @@
 - error handling in axum
 - show a maximum of entries in lists, otherwise chrome has problems
 - visualize refreshing process
-- run refresh in background
 - useful logging/metrics
 - hide path in stream but still allow streaming of m3u8 files
 - change "files" to show current directory

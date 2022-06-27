@@ -23,7 +23,9 @@ async fn refresh(Extension(action): Extension<UpdateAction<Database>>) -> Redire
         exclude_dirs: Vec::new(),
         paths: vec!["./data".to_string()],
     };
-    action.execute(config).await.unwrap();
+    tokio::task::spawn(async move {
+        action.execute(config).await.unwrap();
+    });
     Redirect::to("/")
 }
 
