@@ -7,6 +7,8 @@ use persistence::Database;
 use serde::Serialize;
 use tera::Context;
 
+use crate::templates::Templates;
+
 pub fn setup() -> Router {
     Router::new().route("/", get(list_files))
 }
@@ -16,8 +18,11 @@ struct TemplateContext {
     files: Vec<File>,
 }
 
-async fn list_files(Extension(action): Extension<FindAllAction<Database>>) -> Html<String> {
+async fn list_files(
+    Extension(action): Extension<FindAllAction<Database>>,
+    Extension(templates): Extension<Templates>,
+) -> Html<String> {
     let files = action.execute().await.unwrap();
     let context = Context::from_serialize(TemplateContext { files }).unwrap();
-    return crate::templates::parse("views/files.html", &context);
+    return templates.parse("views/files.html", &context);
 }

@@ -1,0 +1,10 @@
+address = "127.0.0.1:8080"
+
+[server]
+# //"postgresql://postgres:password@localhost"; //"postgresql:db.postgresql"; //"sqlite://db.sqlite"
+db_url = "sqlite://sqlite.db"
+statics_path = "crates/plugins/web/static"
+templates = "crates/plugins/web/templates/**/*.html"
+
+[domain]
+paths_to_check = ["data"]

@@ -1,11 +1,16 @@
 use axum::response::Html;
-use once_cell::sync::Lazy;
 use tera::{Context, Tera};
 
-static TERA: Lazy<Tera> =
-    Lazy::new(|| Tera::new("crates/plugins/web/templates/**/*.html").unwrap());
+#[derive(Clone)]
+pub struct Templates(Tera);
 
-pub fn parse(template: &str, content: &Context) -> Html<String> {
-    let rendered = TERA.render(template, content).unwrap();
-    Html::from(rendered)
+impl Templates {
+    pub fn new(templates: &str) -> Self {
+        Self(Tera::new(templates).unwrap())
+    }
+
+    pub fn parse(&self, template: &str, content: &Context) -> Html<String> {
+        let rendered = self.0.render(template, content).unwrap();
+        Html::from(rendered)
+    }
 }

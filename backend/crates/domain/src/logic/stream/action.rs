@@ -18,14 +18,14 @@ where
         Self { conn }
     }
 
-    pub async fn execute(&self, path: &str, range: Option<Range>) -> Result<Chunk> {
+    pub async fn execute(self, path: &str, range: Option<Range>) -> Result<Chunk> {
         let file = self.find_file_in_db(path).await?;
         let range = range.unwrap_or_default();
         let chunk = Chunk::new(file, &range).await?;
         return Ok(chunk);
     }
 
-    async fn find_file_in_db(&self, path: &str) -> Result<File> {
+    async fn find_file_in_db(self, path: &str) -> Result<File> {
         self.conn
             .transaction()
             .await?

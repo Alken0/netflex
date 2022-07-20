@@ -16,7 +16,7 @@ where
         Self { conn }
     }
 
-    pub async fn execute(&self) -> Result<Vec<File>> {
+    pub async fn execute(self) -> Result<Vec<File>> {
         let transaction = self.conn.transaction().await?;
         return transaction.find_all().await;
     }

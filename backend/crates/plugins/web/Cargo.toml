@@ -13,6 +13,7 @@ tera = { version = "1.15" }
 serde = "1.0"
 once_cell = "1.12"
 regex = "1.5"
+confy = "0.4"
 
 # shared dependencies
 tokio = { version = "1.6" }

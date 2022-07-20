@@ -2,9 +2,11 @@ use axum::response::{Html, Redirect};
 use axum::routing::{get, post};
 use axum::Extension;
 use axum::Router;
-use domain::logic::update::{UpdateAction, UpdateConfig};
+use domain::logic::update::UpdateAction;
 use persistence::Database;
 use tera::Context;
+
+use crate::templates::Templates;
 
 pub fn setup() -> Router {
     Router::new()
@@ -13,18 +15,14 @@ pub fn setup() -> Router {
         .route("/", get(settings))
 }
 
-async fn settings() -> Html<String> {
+async fn settings(Extension(templates): Extension<Templates>) -> Html<String> {
     let context = Context::new();
-    return crate::templates::parse("views/settings.html", &context);
+    return templates.parse("views/settings.html", &context);
 }
 
 async fn refresh(Extension(action): Extension<UpdateAction<Database>>) -> Redirect {
-    let config = UpdateConfig {
-        exclude_dirs: Vec::new(),
-        paths: vec!["./data".to_string()],
-    };
     tokio::task::spawn(async move {
-        action.execute(config).await.unwrap();
+        action.execute().await.unwrap();
     });
     Redirect::to("/")
 }

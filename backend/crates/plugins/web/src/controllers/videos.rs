@@ -8,6 +8,8 @@ use persistence::Database;
 use serde::Serialize;
 use tera::Context;
 
+use crate::templates::Templates;
+
 pub fn setup() -> Router {
     Router::new()
         .route("/:hash", get(player))
@@ -19,10 +21,13 @@ struct ListTemplateContext {
     videos: Vec<File>,
 }
 
-async fn list(Extension(action): Extension<FindAllVideosAction<Database>>) -> Html<String> {
+async fn list(
+    Extension(action): Extension<FindAllVideosAction<Database>>,
+    Extension(templates): Extension<Templates>,
+) -> Html<String> {
     let videos = action.execute().await.unwrap();
     let context = Context::from_serialize(ListTemplateContext { videos }).unwrap();
-    return crate::templates::parse("views/videos/list.html", &context);
+    return templates.parse("views/videos/list.html", &context);
 }
 
 #[derive(Debug, Serialize)]
@@ -33,8 +38,9 @@ struct PlayerTemplateContext {
 async fn player(
     Extension(action): Extension<FindByHashAction<Database>>,
     Path(hash): Path<u64>,
+    Extension(templates): Extension<Templates>,
 ) -> Html<String> {
     let video = action.execute(hash).await.unwrap().unwrap();
     let context = Context::from_serialize(PlayerTemplateContext { video }).unwrap();
-    return crate::templates::parse("views/videos/player.html", &context);
+    return templates.parse("views/videos/player.html", &context);
 }

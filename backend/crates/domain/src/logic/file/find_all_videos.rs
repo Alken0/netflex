@@ -25,7 +25,7 @@ where
         Self { conn }
     }
 
-    pub async fn execute(&self) -> Result<Vec<File>> {
+    pub async fn execute(self) -> Result<Vec<File>> {
         let transaction = self.conn.transaction().await?;
         transaction
             .find_all_where_mime_like_any(STREAMABLE_VIDEO_MIMES)

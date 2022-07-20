@@ -15,7 +15,7 @@ where
         Self { conn }
     }
 
-    pub async fn execute(&self, id: Id) -> Result<Option<File>> {
+    pub async fn execute(self, id: Id) -> Result<Option<File>> {
         let transaction = self.conn.transaction().await?;
         return transaction.find_by_id(id).await;
     }
