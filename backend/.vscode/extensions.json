@@ -3,7 +3,7 @@
 		"karunamurti.tera",
 		"vadimcn.vscode-lldb",
 		"tamasfe.even-better-toml",
-		"matklad.rust-analyzer",
+		"rust-lang.rust-analyzer",
 		"editorconfig.editorconfig"
 	]
 }
