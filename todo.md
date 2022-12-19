@@ -1,8 +1,9 @@
 # TODOS
 
-## Bugs
+## (known) Bugs
+None
 
-## Features
+## (missing) Features
 - error handling in axum
 - show a maximum of entries in lists, otherwise chrome has problems
 - visualize refreshing process
